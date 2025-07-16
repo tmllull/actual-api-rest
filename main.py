@@ -55,6 +55,7 @@ def add_transaction(transaction: TransactionRequest):
         except Exception as e:
             print("Error running rules:" + str(e))
         finally:
+            actual.commit()  # use the actual.commit() instead of session.commit()!
             return "Transaction added"
 
 
