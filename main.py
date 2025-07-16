@@ -48,14 +48,20 @@ def add_transaction(transaction: TransactionRequest):
             notes=transaction.notes,
             amount=decimal.Decimal(-abs(transaction.amount)),
         )
-        return actual.commit()  # use the actual.commit() instead of session.commit()!
+        actual.commit()  # use the actual.commit() instead of session.commit()!
+        try:
+            actual.run_rules([t])
+            print("Rules ran successfully")
+        except Exception as e:
+            print("Error running rules:" + str(e))
+        finally:
+            return "Transaction added"
 
 
 @app.post("/transaction")
 async def create_new_transaction(
     transaction: TransactionRequest, api_key: str = Depends(verify_api_key)
 ):
-
     try:
         return add_transaction(transaction)
     except Exception as e:
