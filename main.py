@@ -24,6 +24,7 @@ class TransactionRequest(BaseModel):
     payee: str
     amount: float
     notes: str
+    outcome: bool = True
 
 
 def verify_api_key(x_api_key: str = Header(...)):
@@ -40,13 +41,17 @@ def add_transaction(transaction: TransactionRequest):
         password=os.getenv("ACTUAL_PASSWORD"),
         file=os.getenv("ACTUAL_FILE"),
     ) as actual:
+        if transaction.outcome:
+            amout = decimal.Decimal(-abs(transaction.amount))
+        else:
+            amount = decimal.Decimal(abs(transaction.amount))
         t = create_transaction(
             actual.session,
             datetime.date.today(),
             transaction.account,
             transaction.payee,
             notes=transaction.notes,
-            amount=decimal.Decimal(-abs(transaction.amount)),
+            amount=amount,
         )
         actual.commit()  # use the actual.commit() instead of session.commit()!
         try:
