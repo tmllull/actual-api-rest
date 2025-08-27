@@ -68,7 +68,8 @@ Content-Type: application/json
   "amount": 12.99,
   "payee": "Spotify",
   "account": "checking",
-  "notes": "Monthly plan"
+  "notes": "Monthly plan",
+  "outcome": true
 }
 ```
 
