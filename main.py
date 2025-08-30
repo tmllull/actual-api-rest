@@ -42,7 +42,7 @@ def add_transaction(transaction: TransactionRequest):
         file=os.getenv("ACTUAL_FILE"),
     ) as actual:
         if transaction.outcome:
-            amout = decimal.Decimal(-abs(transaction.amount))
+            amount = decimal.Decimal(-abs(transaction.amount))
         else:
             amount = decimal.Decimal(abs(transaction.amount))
         t = create_transaction(
